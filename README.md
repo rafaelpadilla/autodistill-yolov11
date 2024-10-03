@@ -99,11 +99,11 @@ target_model = YOLOv11("yolov11n-seg.pt")
 
 Available object detection initialization options are:
 
-* `yolov11n.pt` - nano
-* `yolov11s.pt` - small
-* `yolov11m.pt` - medium
-* `yolov11l.pt` - large
-* `yolov11x.pt` - extra-large
+* `yolo11n.pt` - nano
+* `yolo11s.pt` - small
+* `yolo11m.pt` - medium
+* `yolo11l.pt` - large
+* `yolo11x.pt` - extra-large
 
 ## License
 

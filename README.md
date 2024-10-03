@@ -9,32 +9,32 @@
   </p>
 </div>
 
-# Autodistill: YOLOv8 Target Model
+# Autodistill: YOLOv11 Target Model
 
-This repository contains the code implementing [YOLOv8](https://github.com/ultralytics/ultralytics) as a Target Model for use with [`autodistill`](https://github.com/autodistill/autodistill). You can also use a YOLOv8 model as a base model to auto-label data. 
+This repository contains the code implementing [YOLOv11](https://github.com/ultralytics/ultralytics) as a Target Model for use with [`autodistill`](https://github.com/autodistill/autodistill). You can also use a YOLOv11 model as a base model to auto-label data. 
 
-YOLOv8 is a Convolutional Neural Network (CNN) that supports realtime object detection, instance segmentation, and other tasks. It can be deployed to a variety of edge devices.
+YOLOv11 is a Convolutional Neural Network (CNN) that supports realtime object detection, instance segmentation, keypoint detection, and more.
 
 Read the full [Autodistill documentation](https://autodistill.github.io/autodistill/).
 
-Read the [YOLOv8 Autodistill documentation](https://autodistill.github.io/autodistill/target_models/yolov8/).
-
 ## Installation
 
-To use the YOLOv8 Target Model, simply install it along with a Base Model supporting the `detection` task:
+You can install the Autodistill YOLOv11 Target Model with pip:
 
 ```bash
-pip3 install autodistill-grounded-sam autodistill-yolov8
+pip3 install autodistill-yolov11
 ```
+
+You will also need to install a base model like Grounded SAM (`autodistill-grounded-sam`) to label data.
 
 You can find a full list of `detection` Base Models on [the main autodistill repo](https://github.com/autodistill/autodistill).
 
-## Quickstart (Train a YOLOv8 Model)
+## Quickstart (Train a YOLOv11 Model)
 
 ```python
 from autodistill_grounded_sam import GroundedSAM
 from autodistill.detection import CaptionOntology
-from autodistill_yolov8 import YOLOv8
+from autodistill_yolov11 import YOLOv11
 
 # define an ontology to map class names to our GroundingDINO prompt
 # the ontology dictionary has the format {caption: class}
@@ -48,7 +48,7 @@ base_model.label(
   output_folder="./dataset"
 )
 
-target_model = YOLOv8("yolov8n.pt")
+target_model = YOLOv11("yolo11n.pt")
 target_model.train("./dataset/data.yaml", epochs=200)
 
 # run inference on the new model
@@ -60,26 +60,26 @@ from roboflow import Roboflow
 
 rf = Roboflow(api_key="API_KEY")
 project = rf.workspace().project("PROJECT_ID")
-project.version(DATASET_VERSION).deploy(model_type="yolov8", model_path=f"./runs/detect/train/")
+project.version(DATASET_VERSION).deploy(model_type="yolov11", model_path=f"./runs/detect/train/")
 ```
 
-## Quickstart (Use a YOLOv8 Model to Label Data)
+## Quickstart (Use a YOLOv11 Model to Label Data)
 
 ```python
-from autodistill_yolov8 import YOLOv8Base
+from autodistill_yolov11 import YOLOv11Base
 from autodistill.detection import CaptionOntology
 
-# define an ontology to map class names to our YOLOv8 classes
+# define an ontology to map class names to our YOLOv11 classes
 # the ontology dictionary has the format {caption: class}
 # where caption is the prompt sent to the base model, and class is the label that will
 # be saved for that caption in the generated annotations
 # then, load the model
 
-# replace weights_path with the path to your YOLOv8 weights file
-base_model = YOLOv8Base(ontology=CaptionOntology({"car": "car"}), weights_path="yolov5s.pt")
+# replace weights_path with the path to your YOLOv11 weights file
+base_model = YOLOv11Base(ontology=CaptionOntology({"car": "car"}), weights_path="yolo11n.pt")
 
 # run inference on a single image
-results = base_model.predict("mercedes.jpeg")
+results = base_model.predict("container.jpeg")
 
 base_model.label(
   input_folder="./images",
@@ -89,29 +89,21 @@ base_model.label(
 
 ## Choosing a Task
 
-YOLOv8 supports training both object detection and instance segmentation tasks at various sizes (larger models are slower but can be more accurate). This selection is done in the constructor.
+YOLOv11 supports training both object detection and instance segmentation tasks at various sizes (larger models are slower but can be more accurate). This selection is done in the constructor.
 
 For example:
 ```python
 # initializes a nano-sized instance segmentation model
-target_model = YOLOv8("yolov8n-seg.pt")
+target_model = YOLOv11("yolov11n-seg.pt")
 ```
 
 Available object detection initialization options are:
 
-* `yolov8n.pt` - nano (3.2M parameters)
-* `yolov8s.pt` - small (11.2M parameters)
-* `yolov8m.pt` - medium (25.9M parameters)
-* `yolov8l.pt` - large (43.7M parameters)
-* `yolov8x.pt` - extra-large (68.2M parameters)
-
-Available instance segmentation initialization options are:
-
-* `yolov8n-seg.pt` - nano (3.4M parameters)
-* `yolov8s-seg.pt` - small (11.8M parameters)
-* `yolov8m-seg.pt` - medium (27.3M parameters)
-* `yolov8l-seg.pt` - large (46.0M parameters)
-* `yolov8x-seg.pt` - extra-large (71.8M parameters)
+* `yolov11n.pt` - nano
+* `yolov11s.pt` - small
+* `yolov11m.pt` - medium
+* `yolov11l.pt` - large
+* `yolov11x.pt` - extra-large
 
 ## License
 

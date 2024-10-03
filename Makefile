@@ -1,7 +1,7 @@
 .PHONY: style check_code_quality
 
 export PYTHONPATH = .
-check_dirs := autodistill_yolov8
+check_dirs := autodistill_yolov11
 
 style:
 	black  $(check_dirs)

@@ -39,5 +39,5 @@ class YOLOv11(DetectionTargetModel):
     def predict(self, input: str, confidence=0.5) -> sv.Detections:
         return self.yolo(input, conf=confidence)
 
-    def train(self, dataset_yaml, epochs=200, device="cpu"):
-        self.yolo.train(data=dataset_yaml, epochs=epochs, device=device)
+    def train(self, dataset_yaml, epochs=200, device="cpu", **kwargs):
+        self.yolo.train(data=dataset_yaml, epochs=epochs, device=device, **kwargs)
